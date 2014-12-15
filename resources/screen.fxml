@@ -7,7 +7,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bugworm.ac2014.SyobochimController">
    <children>
       <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: BLACK;" />
@@ -15,7 +14,7 @@
          <top>
             <HBox alignment="CENTER_RIGHT" prefHeight="64.0" prefWidth="720.0" spacing="8.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="64.0" prefWidth="277.0" text="0" textFill="#ffffffb2">
+                  <Label fx:id="score" alignment="CENTER_RIGHT" prefHeight="64.0" prefWidth="277.0" text="0" textFill="#ffffffb2">
                      <font>
                         <Font name="Monospaced Bold" size="36.0" />
                      </font>
@@ -35,5 +34,6 @@
             </HBox>
          </top>
       </BorderPane>
+      <Pane fx:id="mainScreen" prefHeight="200.0" prefWidth="200.0" />
    </children>
 </StackPane>
