@@ -14,14 +14,11 @@ class Snowman extends ImageView{
   x = Math.random * (SyobochimController.instance.mainScreen.getWidth - 64)
   y = Math.random * (SyobochimController.instance.mainScreen.getHeight - 64)
 
-  def touch() : Unit = {
+  def touch() = {
     SyobochimController.instance.mainScreen.getChildren.remove(this)
   }
 
-  onMouseMoved = handle {
-    touch()
-  }
-  onTouchMoved = handle {
+  onMouseClicked = handle {
     touch()
   }
   onTouchPressed = handle {

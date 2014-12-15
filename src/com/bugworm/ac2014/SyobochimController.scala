@@ -8,9 +8,17 @@ import javafx.scene.input.TouchEvent
 import javafx.scene.layout.Pane
 
 import scalafx.animation.{Timeline, KeyFrame}
+import scalafx.scene.image.{ImageView, Image}
 
 object SyobochimController{
   var instance : SyobochimController = _
+  val syobochim : ImageView = new ImageView{
+    image = new Image("/syobochim.jpg")
+    fitHeight = 64
+    fitWidth = 64
+    x = 320
+    y = 580
+  }
 }
 class SyobochimController extends Initializable{
 
@@ -22,6 +30,7 @@ class SyobochimController extends Initializable{
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
     SyobochimController.instance = this
+    mainScreen.getChildren.add(SyobochimController.syobochim)
     new Loop().play();
   }
 }
