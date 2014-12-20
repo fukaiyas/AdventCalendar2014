@@ -7,8 +7,10 @@ import javafx.scene.control.Label
 import javafx.scene.input.TouchEvent
 import javafx.scene.layout.Pane
 
-import scalafx.animation.{Timeline, KeyFrame}
+import scalafx.animation._
 import scalafx.scene.image.{ImageView, Image}
+import scalafx.scene.shape.{MoveTo, ArcTo, Path}
+import scalafx.util.Duration
 
 object SyobochimController{
   var instance : SyobochimController = _
@@ -16,8 +18,15 @@ object SyobochimController{
     image = new Image("/syobochim.jpg")
     fitHeight = 64
     fitWidth = 64
-    x = 320
-    y = 580
+    translateX = 276
+    translateY = 640
+  }
+  var current = new TranslateTransition{
+    node = syobochim
+    duration = Duration(1000)
+    autoReverse = true
+    cycleCount = Animation.Indefinite
+    toX = 380
   }
 }
 class SyobochimController extends Initializable{
@@ -31,6 +40,8 @@ class SyobochimController extends Initializable{
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
     SyobochimController.instance = this
     mainScreen.getChildren.add(SyobochimController.syobochim)
+    println(SyobochimController.current.delegate)
+    SyobochimController.current.play()
     new Loop().play();
   }
 }

@@ -12,7 +12,7 @@ class Snowman extends ImageView{
   fitHeight = 64
   fitWidth = 64
   x = Math.random * (SyobochimController.instance.mainScreen.getWidth - 64)
-  y = Math.random * (SyobochimController.instance.mainScreen.getHeight - 64)
+  y = Math.random * (SyobochimController.instance.mainScreen.getHeight - 128)
 
   def touch() = {
     SyobochimController.instance.mainScreen.getChildren.remove(this)
