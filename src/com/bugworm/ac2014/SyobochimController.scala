@@ -9,10 +9,14 @@ import javafx.scene.layout.Pane
 import scala.collection.mutable.ListBuffer
 import scalafx.Includes._
 import scalafx.animation._
+import scalafx.beans.property.IntegerProperty
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.util.Duration
+import scalafx.util.converter.NumberStringConverter
 
 object SyobochimController{
+  val score : IntegerProperty = IntegerProperty(0)
+  var scoreRate : Integer = 1
   var instance : SyobochimController = _
   val syobochim : ImageView = new ImageView{
     image = new Image("/syobochim.png")
@@ -57,7 +61,7 @@ object SyobochimController{
       }.play()
       return
     }
-    waitingAnimation.pause()
+    waitingAnimation.stop()
     kunkaNext()
   }
   def action(snowman : Snowman): Unit ={
@@ -80,6 +84,22 @@ object SyobochimController{
       toX = target.translateX.value
       toY = target.translateY.value
       onFinished = handle {
+        new TranslateTransition{
+          node = new ImageView{
+            image = new Image("/kunka.png")
+            translateX = syobochim.translateX.value - 18
+            translateY = syobochim.translateY.value
+          }
+          instance.mainScreen.getChildren.append(node.value)
+          duration = Duration(800)
+          toY = syobochim.translateY.value - 32
+          onFinished = handle{
+            instance.mainScreen.getChildren.remove(node.value)
+          }
+        }.play()
+        score.value = score.value + scoreRate
+        scoreRate += 1
+        println(score.value)
         instance.mainScreen.getChildren.remove(target.delegate)
         instance.mainScreen.getChildren.remove(target.lockon.delegate)
         if(targets.isEmpty) home() else kunkaNext()
@@ -96,6 +116,7 @@ object SyobochimController{
     }
   }
   def home(): Unit ={
+    scoreRate = 1
     new TranslateTransition(){
       node = syobochim
       duration = Duration(200)
@@ -124,6 +145,7 @@ class SyobochimController extends Initializable{
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
     SyobochimController.instance = this
+    score.textProperty().bindBidirectional(SyobochimController.score, new NumberStringConverter()) //TODO 調べる
     mainScreen.getChildren.add(SyobochimController.syobochim)
     SyobochimController.waitingAnimation.play()
     new Loop().play()
