@@ -2,8 +2,9 @@ package com.bugworm.ac2014
 
 import java.net.URL
 import java.util.ResourceBundle
+import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
-import javafx.scene.control.Label
+import javafx.scene.control.{Button, Label}
 import javafx.scene.layout.Pane
 
 import scala.collection.mutable.ListBuffer
@@ -38,6 +39,23 @@ object SyobochimController{
     autoReverse = true
     cycleCount = Animation.Indefinite
     toX = 380
+  }
+  var loop = false
+  def startLoop() : Unit = {
+    loop = true
+    score.value = 0
+    instance.restartButton.visible = false
+    instance.endLabel.visible = false
+  }
+  def endLoop() : Unit = {
+    loop = false
+    checkTermination()
+  }
+  def checkTermination() : Unit = {
+    if(!loop){
+      instance.restartButton.visible = true
+      instance.endLabel.visible = true
+    }
   }
   def touch() : Unit = {
     if(targets.isEmpty){
@@ -99,7 +117,6 @@ object SyobochimController{
         }.play()
         score.value = score.value + scoreRate
         scoreRate += 1
-        println(score.value)
         instance.mainScreen.getChildren.remove(target.delegate)
         instance.mainScreen.getChildren.remove(target.lockon.delegate)
         if(targets.isEmpty) home() else kunkaNext()
@@ -114,6 +131,7 @@ object SyobochimController{
     if(targets.contains(snowman)){
       targets.remove(targets.indexOf(snowman))
     }
+    checkTermination()
   }
   def home(): Unit ={
     scoreRate = 1
@@ -139,15 +157,24 @@ class SyobochimController extends Initializable{
 
   @FXML
   var score : Label = _
-
   @FXML
   var mainScreen : Pane = _
+  @FXML
+  var endLabel : Label = _
+  @FXML
+  var restartButton : Button = _
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
     SyobochimController.instance = this
     score.textProperty().bindBidirectional(SyobochimController.score, new NumberStringConverter()) //TODO 調べる
     mainScreen.getChildren.add(SyobochimController.syobochim)
     SyobochimController.waitingAnimation.play()
+    new Loop().play()
+  }
+
+  @FXML
+  def restart(e : ActionEvent): Unit ={
+    SyobochimController.startLoop()
     new Loop().play()
   }
 }

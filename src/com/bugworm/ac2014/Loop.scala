@@ -8,12 +8,19 @@ import scalafx.util.Duration
 
 class Loop extends Timeline {
 
-  cycleCount = Timeline.Indefinite
-  keyFrames = KeyFrame(Duration(100), "main loop", new EventHandler[ActionEvent] {
-    def handle(e : ActionEvent) : Unit = {
-      snowman()
-    }
-  })
+  val cycle = 100
+  cycleCount = 60000 / cycle
+  keyFrames = KeyFrame(Duration(cycle), "main loop", handle { snowman() } )
+//  onFinished = handle{ SyobochimController.endLoop() }
+  onFinished = handle {
+    new Timeline{
+      cycleCount = 1
+      keyFrames = KeyFrame(Duration(6000), "")
+      onFinished = handle { SyobochimController.endLoop() }
+    }.play()
+  }
+  SyobochimController.startLoop()
+  SyobochimAdventCalendar.random.setSeed(123)
 
   def snowman() : Unit = {
     if(SyobochimAdventCalendar.random.nextDouble > 0.9){

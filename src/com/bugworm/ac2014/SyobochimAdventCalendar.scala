@@ -19,5 +19,4 @@ object SyobochimAdventCalendar extends JFXApp {
       root = screen
     }
   }
-  random.setSeed(123)
 }
