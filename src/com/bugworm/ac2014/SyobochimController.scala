@@ -11,6 +11,7 @@ import scala.collection.mutable.ListBuffer
 import scalafx.Includes._
 import scalafx.animation._
 import scalafx.beans.property.IntegerProperty
+import scalafx.scene.Node
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.util.Duration
 import scalafx.util.converter.NumberStringConverter
@@ -25,12 +26,8 @@ object SyobochimController{
     fitWidth = 64
     translateX = 276
     translateY = 640
-    onMousePressed = handle {
-      touch()
-    }
-    onTouchPressed = handle {
-      touch()
-    }
+    onMousePressed = handle { touch() }
+    onTouchPressed = handle { touch() }
   }
   val targets : ListBuffer[Snowman] = new ListBuffer[Snowman]
   var waitingAnimation = new TranslateTransition{
@@ -59,38 +56,21 @@ object SyobochimController{
   }
   def touch() : Unit = {
     if(targets.isEmpty){
-      val fuyo = new ImageView{
-        image = new Image("/fuyo.png")
-        fitWidth = 160
-        fitHeight = 120
-        translateX <== syobochim.translateX - 40
-        translateY = 560
-      }
-      instance.mainScreen.getChildren.add(fuyo)
-      new TranslateTransition{
-        node = fuyo
-        cycleCount = 3
-        autoReverse = true
-        duration = Duration(800)
-        toY = 520
-        onFinished = handle{
-          instance.mainScreen.getChildren.remove(fuyo.delegate)
-        }
-      }.play()
-      return
+      Fuyo(syobochim)
+    }else{
+      waitingAnimation.stop()
+      kunkaNext()
     }
-    waitingAnimation.stop()
-    kunkaNext()
   }
   def action(snowman : Snowman): Unit ={
     if(!targets.contains(snowman)) {
       targets.append(snowman)
-      snowman.lockon = new ImageView{
+      snowman.lockon = Some(new ImageView{
         image = new Image("/lockon.png")
         translateX <== snowman.translateX
         translateY <== snowman.translateY
-      }
-      instance.mainScreen.getChildren.add(snowman.lockon)
+      })
+      instance.mainScreen.getChildren.add(snowman.lockon.get)
     }
   }
   def kunkaNext() : Unit = {
@@ -111,23 +91,22 @@ object SyobochimController{
           instance.mainScreen.getChildren.append(node.value)
           duration = Duration(800)
           toY = syobochim.translateY.value - 32
-          onFinished = handle{
-            instance.mainScreen.getChildren.remove(node.value)
-          }
+          onFinished = handle{ removeTarget(node.value) }
         }.play()
         score.value = score.value + scoreRate
         scoreRate += 1
-        instance.mainScreen.getChildren.remove(target.delegate)
-        instance.mainScreen.getChildren.remove(target.lockon.delegate)
+        removeTarget(target.delegate)
+        target.lockon.foreach(v => removeTarget(v))
         if(targets.isEmpty) home() else kunkaNext()
       }
     }.play()
   }
+  def removeTarget(target : Node) : Unit = {
+    instance.mainScreen.getChildren.remove(target.delegate)
+  }
   def remove(snowman : Snowman) : Unit = {
-    instance.mainScreen.getChildren.remove(snowman.delegate)
-    if(snowman.lockon != null){
-      instance.mainScreen.getChildren.remove(snowman.lockon.delegate)
-    }
+    removeTarget(snowman.delegate)
+    snowman.lockon.foreach(v => removeTarget(v))
     if(targets.contains(snowman)){
       targets.remove(targets.indexOf(snowman))
     }

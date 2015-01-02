@@ -3,12 +3,13 @@ package com.bugworm.ac2014
 import scalafx.Includes._
 import scalafx.animation.TranslateTransition
 import scalafx.scene.Node
-import scalafx.scene.image.ImageView
+import scalafx.scene.image.{Image, ImageView}
 import scalafx.util.Duration
 
 object Fuyo {
+  val image : Image = new Image("/fuyo.png")
   def apply(syobochim : Node) : Unit = {
-    val fuyo = new ImageView("/fuyo.png"){
+    val fuyo = new ImageView(image){
       fitWidth = 160
       fitHeight = 120
       translateX <== syobochim.translateX - 40

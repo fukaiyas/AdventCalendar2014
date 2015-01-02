@@ -19,19 +19,11 @@ class Snowman extends ImageView{
   translateY = SyobochimAdventCalendar.random.nextDouble * (SyobochimController.instance.mainScreen.getHeight - 128)
   val move = new Linear(this, r)
   var lockon : Option[ImageView] = None
-
   def touch() = {
     SyobochimController.action(this)
   }
-  def kunka() = {
-  }
-
-  onMousePressed = handle {
-    touch()
-  }
-  onTouchPressed = handle {
-    touch()
-  }
+  onMousePressed = handle { touch() }
+  onTouchPressed = handle { touch() }
 }
 
 class Linear(backpaper : Snowman, r : Boolean) extends TranslateTransition{
@@ -41,8 +33,6 @@ class Linear(backpaper : Snowman, r : Boolean) extends TranslateTransition{
   toX = if(r) 848 else -64
   duration = Duration(Math.random * 3000 + 6000)
   interpolator = Interpolator.LINEAR
-  onFinished = handle {
-    SyobochimController.remove(snowman)
-  }
+  onFinished = handle { SyobochimController.remove(snowman) }
   play()
 }
