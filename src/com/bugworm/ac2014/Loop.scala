@@ -11,7 +11,6 @@ class Loop extends Timeline {
   val cycle = 100
   cycleCount = 60000 / cycle
   keyFrames = KeyFrame(Duration(cycle), "main loop", handle { snowman() } )
-//  onFinished = handle{ SyobochimController.endLoop() }
   onFinished = handle {
     new Timeline{
       cycleCount = 1

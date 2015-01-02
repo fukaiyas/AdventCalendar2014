@@ -18,7 +18,7 @@ class Snowman extends ImageView{
   translateX = if(r) -64 else 784
   translateY = SyobochimAdventCalendar.random.nextDouble * (SyobochimController.instance.mainScreen.getHeight - 128)
   val move = new Linear(this, r)
-  var lockon : ImageView = _
+  var lockon : Option[ImageView] = None
 
   def touch() = {
     SyobochimController.action(this)
